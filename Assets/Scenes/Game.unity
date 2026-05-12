@@ -342,7 +342,7 @@ Transform:
   m_GameObject: {fileID: 590894261}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.35594, y: 0.19273, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -465,10 +465,11 @@ MonoBehaviour:
   r_LeftButton: {fileID: 265036953656671793, guid: fb2572c3a1e05214098b9f9964fd6f2a, type: 3}
   r_RightButton: {fileID: -4793182403577199440, guid: fb2572c3a1e05214098b9f9964fd6f2a, type: 3}
   r_MousePosition: {fileID: -5238768601435964892, guid: fb2572c3a1e05214098b9f9964fd6f2a, type: 3}
+  r_MouseDelta: {fileID: -139229597123280201, guid: fb2572c3a1e05214098b9f9964fd6f2a, type: 3}
   r_MouseScroll: {fileID: -8617862656694951888, guid: fb2572c3a1e05214098b9f9964fd6f2a, type: 3}
   m_Camera: {fileID: 519420031}
-  time: 0.5
-  targetPos: {x: 0, y: 0, z: 0}
+  dragSensitivity: 0.175
+  lerpConstant: 20
 --- !u!4 &1725487763
 Transform:
   m_ObjectHideFlags: 0
@@ -497,7 +498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
   m_Actions: {fileID: -944628639613478452, guid: fb2572c3a1e05214098b9f9964fd6f2a, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -508,7 +509,39 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5635d3ff-331a-413a-838c-d42ed11cc0e5
+    m_ActionName: 'Game/LeftButton[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1725487762}
+        m_TargetAssemblyTypeName: DragManager, Assembly-CSharp
+        m_MethodName: OnRightButton
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 84c587ed-357e-47ba-9843-667620a8c1b4
+    m_ActionName: 'Game/RightButton[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 572fefc0-2f6d-48d9-90d5-776ac2e4b8dd
+    m_ActionName: 'Game/MousePosition[/Mouse/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8043e5fa-436d-472f-9b3e-042a6a4017e3
+    m_ActionName: 'Game/MouseScroll[/Mouse/scroll]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f7a8852d-6874-40b3-8a29-d438af49e6dc
+    m_ActionName: 'Game/MouseDelta[/Mouse/delta]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Game
