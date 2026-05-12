@@ -18,8 +18,12 @@ public class DragManager : MonoBehaviour
     private float camSoftFloor = 10;
     private float camSoftCeiling = 100;
     private Vector3 targetPos;
+    private Vector3 targetItemPos;
     private Vector3 dragAnchor;
+    private Vector3 itemDragAnchor;
+    private Transform currentItem;
     private bool IsMoving;
+    private bool IsDragging;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,6 +43,10 @@ public class DragManager : MonoBehaviour
 
         if (IsMoving)
             DragCam();
+        if (IsDragging)
+            DragItem();
+
+        //Debug.DrawRay(worldPos, Vector2.zero);
     }
 
     private void ScrollCam()
@@ -61,11 +69,43 @@ public class DragManager : MonoBehaviour
         targetPos += moveVector;
     }
 
+    private void DragItem()
+    {
+        Vector3 currentWorld = ScreenToWorld(GetMousePos);
+        Vector3 moveVector = itemDragAnchor - currentWorld;
+
+        currentItem.position += moveVector;
+    }
+
     private Vector3 ScreenToWorld(Vector2 screenPos)
     {
         // Z passed to ScreenToWorldPoint = distance from camera to the target plane
         float distanceToGroundPlane = Mathf.Abs(transform.position.z);
         return Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, distanceToGroundPlane));
+    }
+
+    public void OnLeftButton(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            // Claude assisted
+
+            Vector3 worldPos = ScreenToWorld(GetMousePos);
+            //Physics.Raycast(m_Camera.transform.position, worldPos - m_Camera.transform.position, out RaycastHit hit);
+            RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+            if (hit.collider == null)
+                return;
+            Debug.Log("Dragging: " + hit.collider.transform.gameObject.name);
+
+            currentItem = hit.collider.transform;
+            targetItemPos = worldPos;
+            itemDragAnchor = ScreenToWorld(GetMousePos);
+        }
+        else if (context.canceled)
+        {
+            IsDragging = false;
+            Debug.Log("Stopped dragging");
+        }
     }
 
     public void OnRightButton(InputAction.CallbackContext context)
