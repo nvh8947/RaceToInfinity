@@ -46,7 +46,7 @@ public class DragManager : MonoBehaviour
         if (IsDragging)
             DragItem();
 
-        //Debug.DrawRay(worldPos, Vector2.zero);
+        Debug.DrawRay(m_Camera.transform.position, ScreenToWorld(GetMousePos) - m_Camera.transform.position);
     }
 
     private void ScrollCam()
@@ -74,13 +74,13 @@ public class DragManager : MonoBehaviour
         Vector3 currentWorld = ScreenToWorld(GetMousePos);
         Vector3 moveVector = itemDragAnchor - currentWorld;
 
-        currentItem.position += moveVector;
+        currentItem.position = currentWorld; 
     }
 
     private Vector3 ScreenToWorld(Vector2 screenPos)
     {
         // Z passed to ScreenToWorldPoint = distance from camera to the target plane
-        float distanceToGroundPlane = Mathf.Abs(transform.position.z);
+        float distanceToGroundPlane = Mathf.Abs(m_Camera.transform.position.z);
         return Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, distanceToGroundPlane));
     }
 
@@ -91,15 +91,21 @@ public class DragManager : MonoBehaviour
             // Claude assisted
 
             Vector3 worldPos = ScreenToWorld(GetMousePos);
-            //Physics.Raycast(m_Camera.transform.position, worldPos - m_Camera.transform.position, out RaycastHit hit);
-            RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
-            if (hit.collider == null)
+            // Vector dir camera -> world pos
+            Vector3 rayDir = worldPos - m_Camera.transform.position;
+            bool didHit = Physics.Raycast(m_Camera.transform.position, rayDir, out RaycastHit hit);
+            //RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+            if (!didHit)
+            {
+                Debug.Log("Miss");
                 return;
-            Debug.Log("Dragging: " + hit.collider.transform.gameObject.name);
+            }
 
             currentItem = hit.collider.transform;
-            targetItemPos = worldPos;
-            itemDragAnchor = ScreenToWorld(GetMousePos);
+            itemDragAnchor = worldPos;
+            IsDragging = true;
+
+            Debug.Log("Dragging: " + currentItem.gameObject.name);
         }
         else if (context.canceled)
         {
